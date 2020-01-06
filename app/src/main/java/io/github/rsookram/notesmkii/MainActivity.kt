@@ -8,6 +8,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelLazy
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
+import kotlinx.coroutines.Dispatchers
 
 class MainActivity : FragmentActivity(R.layout.activity_main) {
 
@@ -15,7 +17,7 @@ class MainActivity : FragmentActivity(R.layout.activity_main) {
     private val vm by ViewModelLazy(MainViewModel::class, { this.viewModelStore }) {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-                MainViewModel() as T
+                MainViewModel(UriData(applicationContext, Dispatchers.IO)) as T
         }
     }
 
@@ -39,8 +41,16 @@ class MainActivity : FragmentActivity(R.layout.activity_main) {
             }
         }
 
+        vm.title.observe(this) { toolbar.title = it }
+
         val editor = findViewById<TextView>(R.id.text)
         editor.doOnTextChanged { text, _, _, _ -> vm.onTextChanged(text.toString()) }
+
+        vm.content.observe(this) {
+            if (editor.text.toString() != it) {
+                editor.text = it
+            }
+        }
     }
 
     override fun onPause() {
