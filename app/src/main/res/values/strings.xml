@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Notes Mk II</string>
+
+    <string name="take_note_prompt">Take a note</string>
 </resources>
