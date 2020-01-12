@@ -32,7 +32,6 @@
             android:gravity="top"
             android:hint="@string/take_note_prompt"
             android:importantForAutofill="no"
-            android:inputType="text"
             android:letterSpacing="0.03125"
             android:lineSpacingMultiplier="1.2"
             android:paddingHorizontal="16dp"
