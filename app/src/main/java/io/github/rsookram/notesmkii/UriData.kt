@@ -22,6 +22,10 @@ class UriData(private val context: Context, private val bgDispatcher: CoroutineD
         val stream = context.contentResolver.openOutputStream(uri)
             ?: throw IOException("Failed to open $uri")
 
-        stream.use { it.bufferedWriter().write(content) }
+        stream.use {
+            it.bufferedWriter().use { writer ->
+                writer.write(content)
+            }
+        }
     }
 }
