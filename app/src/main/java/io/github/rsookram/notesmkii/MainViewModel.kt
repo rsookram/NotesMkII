@@ -10,6 +10,7 @@ class MainViewModel(private val uriData: UriData) : ViewModel() {
     private var editedContent: String? = null
 
     private val uri = MutableLiveData<Uri>()
+    val currentUri get() = uri.value
 
     val title: LiveData<String> = uri.switchMap {
         liveData<String> {

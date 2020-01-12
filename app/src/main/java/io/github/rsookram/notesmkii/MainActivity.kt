@@ -2,6 +2,7 @@ package io.github.rsookram.notesmkii
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toolbar
@@ -16,6 +17,8 @@ import kotlinx.coroutines.Dispatchers
 private const val REQUEST_CODE_OPEN = 1
 private const val REQUEST_CODE_CREATE = 2
 
+private const val STATE_URI = "uri"
+
 class MainActivity : FragmentActivity(R.layout.activity_main) {
 
     @Suppress("UNCHECKED_CAST")
@@ -28,6 +31,11 @@ class MainActivity : FragmentActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val uri = savedInstanceState?.getParcelable<Uri>(STATE_URI)
+        if (uri != null) {
+            vm.onUriSelected(uri)
+        }
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar.inflateMenu(R.menu.toolbar)
@@ -90,5 +98,10 @@ class MainActivity : FragmentActivity(R.layout.activity_main) {
         }
 
         vm.onUriSelected(uri)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(STATE_URI, vm.currentUri)
     }
 }
