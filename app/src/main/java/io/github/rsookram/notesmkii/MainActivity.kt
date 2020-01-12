@@ -29,6 +29,8 @@ class MainActivity : FragmentActivity(R.layout.activity_main) {
         }
     }
 
+    private val editor by lazy { findViewById<TextView>(R.id.text) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -56,7 +58,6 @@ class MainActivity : FragmentActivity(R.layout.activity_main) {
 
         vm.title.observe(this) { toolbar.title = it }
 
-        val editor = findViewById<TextView>(R.id.text)
         editor.doOnTextChanged { text, _, _, _ -> vm.onTextChanged(text.toString()) }
 
         vm.content.observe(this) {
@@ -86,6 +87,8 @@ class MainActivity : FragmentActivity(R.layout.activity_main) {
     override fun onPause() {
         super.onPause()
         vm.save()
+
+        editor.clearFocus()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
