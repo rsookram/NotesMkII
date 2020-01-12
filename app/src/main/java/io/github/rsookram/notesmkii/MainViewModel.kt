@@ -23,10 +23,18 @@ class MainViewModel(private val uriData: UriData) : ViewModel() {
         }
     }
 
+    private val openEventData = eventLiveData<Unit>()
+    val opens: LiveData<Unit> = openEventData
+
+    private val createEventData = eventLiveData<Unit>()
+    val creates: LiveData<Unit> = createEventData
+
     fun onOpenClicked() {
+        openEventData.setValue(Unit)
     }
 
     fun onCreateClicked() {
+        createEventData.setValue(Unit)
     }
 
     fun onUriSelected(uri: Uri) {
@@ -44,5 +52,24 @@ class MainViewModel(private val uriData: UriData) : ViewModel() {
         GlobalScope.launch {
             uriData.writeContent(uri, content)
         }
+    }
+}
+
+private fun <T : Any> eventLiveData() = object : MutableLiveData<T>() {
+
+    private var pending = false
+
+    override fun observe(owner: LifecycleOwner, observer: Observer<in T>) {
+        super.observe(owner, Observer<T> { t ->
+            if (pending) {
+                pending = false
+                observer.onChanged(t)
+            }
+        })
+    }
+
+    override fun setValue(value: T) {
+        pending = true
+        super.setValue(value)
     }
 }

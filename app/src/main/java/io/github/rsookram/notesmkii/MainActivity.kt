@@ -1,5 +1,7 @@
 package io.github.rsookram.notesmkii
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toolbar
@@ -10,6 +12,9 @@ import androidx.lifecycle.ViewModelLazy
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import kotlinx.coroutines.Dispatchers
+
+private const val REQUEST_CODE_OPEN = 1
+private const val REQUEST_CODE_CREATE = 2
 
 class MainActivity : FragmentActivity(R.layout.activity_main) {
 
@@ -51,10 +56,39 @@ class MainActivity : FragmentActivity(R.layout.activity_main) {
                 editor.text = it
             }
         }
+
+        vm.opens.observe(this) {
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                flags = Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                type = "text/plain"
+            }
+
+            startActivityForResult(intent, REQUEST_CODE_OPEN)
+        }
+
+        vm.creates.observe(this) {
+            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                type = "text/plain"
+            }
+
+            startActivityForResult(intent, REQUEST_CODE_CREATE)
+        }
     }
 
     override fun onPause() {
         super.onPause()
         vm.save()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        val uri = data?.data
+        if (resultCode != Activity.RESULT_OK || uri == null) {
+            finish()
+            return
+        }
+
+        vm.onUriSelected(uri)
     }
 }
