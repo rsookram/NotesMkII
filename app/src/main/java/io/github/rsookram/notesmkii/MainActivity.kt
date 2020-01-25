@@ -6,8 +6,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toolbar
+import androidx.activity.ComponentActivity
 import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelLazy
 import androidx.lifecycle.ViewModelProvider
@@ -19,7 +19,7 @@ private const val REQUEST_CODE_CREATE = 2
 
 private const val STATE_URI = "uri"
 
-class MainActivity : FragmentActivity(R.layout.activity_main) {
+class MainActivity : ComponentActivity(R.layout.activity_main) {
 
     @Suppress("UNCHECKED_CAST")
     private val vm by ViewModelLazy(MainViewModel::class, { this.viewModelStore }) {
