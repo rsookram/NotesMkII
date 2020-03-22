@@ -17,12 +17,14 @@ private const val STATE_URI = "uri"
 
 class MainActivity : ComponentActivity(R.layout.activity_main) {
 
-    private val vm by Dependencies.viewModelLazy(this)
+    private lateinit var vm: MainViewModel
 
     private val editor by lazy { findViewById<TextView>(R.id.text) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        vm = Dependencies.viewModel(this)
 
         val uri = savedInstanceState?.getParcelable<Uri>(STATE_URI)
         if (uri != null) {
