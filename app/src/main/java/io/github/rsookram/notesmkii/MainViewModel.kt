@@ -61,7 +61,7 @@ private fun <T : Any> eventLiveData() = object : MutableLiveData<T>() {
     private var pending = false
 
     override fun observe(owner: LifecycleOwner, observer: Observer<in T>) {
-        super.observe(owner, Observer<T> { t ->
+        super.observe(owner, Observer { t ->
             if (pending) {
                 pending = false
                 observer.onChanged(t)
