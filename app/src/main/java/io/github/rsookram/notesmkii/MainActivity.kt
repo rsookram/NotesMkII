@@ -8,11 +8,7 @@ import android.widget.TextView
 import android.widget.Toolbar
 import androidx.activity.ComponentActivity
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelLazy
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
-import kotlinx.coroutines.Dispatchers
 
 private const val REQUEST_CODE_OPEN = 1
 private const val REQUEST_CODE_CREATE = 2
@@ -21,13 +17,7 @@ private const val STATE_URI = "uri"
 
 class MainActivity : ComponentActivity(R.layout.activity_main) {
 
-    @Suppress("UNCHECKED_CAST")
-    private val vm by ViewModelLazy(MainViewModel::class, { this.viewModelStore }) {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-                MainViewModel(UriData(applicationContext, Dispatchers.IO)) as T
-        }
-    }
+    private val vm by Dependencies.viewModelLazy(this)
 
     private val editor by lazy { findViewById<TextView>(R.id.text) }
 
