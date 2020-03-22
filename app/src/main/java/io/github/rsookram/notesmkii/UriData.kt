@@ -15,7 +15,7 @@ class UriData(private val context: Context, private val bgDispatcher: CoroutineD
 
     suspend fun readContent(uri: Uri): String = withContext(bgDispatcher) {
         val stream = context.contentResolver.openInputStream(uri) ?: return@withContext ""
-        stream.use { it.bufferedReader().readText() }
+        stream.use { it.reader().readText() }
     }
 
     suspend fun writeContent(uri: Uri, content: String) = withContext(bgDispatcher) {
@@ -23,7 +23,7 @@ class UriData(private val context: Context, private val bgDispatcher: CoroutineD
             ?: throw IOException("Failed to open $uri")
 
         stream.use {
-            it.bufferedWriter().use { writer ->
+            it.writer().use { writer ->
                 writer.write(content)
             }
         }
