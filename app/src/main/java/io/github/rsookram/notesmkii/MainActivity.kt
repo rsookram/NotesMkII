@@ -98,6 +98,6 @@ class MainActivity : ComponentActivity(R.layout.activity_main) {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(STATE_URI, vm.currentUri)
+        outState.putParcelable(STATE_URI, vm.uri)
     }
 }

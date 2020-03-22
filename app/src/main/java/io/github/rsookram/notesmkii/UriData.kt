@@ -3,29 +3,40 @@ package io.github.rsookram.notesmkii
 import android.content.Context
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.withContext
 import java.io.IOException
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.Executor
+import java.util.function.Supplier
 
-class UriData(private val context: Context, private val bgDispatcher: CoroutineDispatcher) {
+class UriData(private val context: Context, private val bgExecutor: Executor) {
 
-    suspend fun getName(uri: Uri): String? = withContext(bgDispatcher) {
-        DocumentFile.fromSingleUri(context, uri)!!.name
-    }
+    fun getName(uri: Uri): CompletableFuture<String?> =
+        CompletableFuture.supplyAsync(
+            Supplier { DocumentFile.fromSingleUri(context, uri)!!.name },
+            bgExecutor
+        )
 
-    suspend fun readContent(uri: Uri): String = withContext(bgDispatcher) {
-        val stream = context.contentResolver.openInputStream(uri) ?: return@withContext ""
-        stream.use { it.reader().readText() }
-    }
+    fun readContent(uri: Uri): CompletableFuture<String> =
+        CompletableFuture.supplyAsync(
+            Supplier {
+                val stream = context.contentResolver.openInputStream(uri) ?: return@Supplier ""
+                stream.use { it.reader().readText() }
+            },
+            bgExecutor
+        )
 
-    suspend fun writeContent(uri: Uri, content: String) = withContext(bgDispatcher) {
-        val stream = context.contentResolver.openOutputStream(uri)
-            ?: throw IOException("Failed to open $uri")
+    fun writeContent(uri: Uri, content: String): CompletableFuture<Void> =
+        CompletableFuture.runAsync(
+            Runnable {
+                val stream = context.contentResolver.openOutputStream(uri)
+                    ?: throw IOException("Failed to open $uri")
 
-        stream.use {
-            it.writer().use { writer ->
-                writer.write(content)
-            }
-        }
-    }
+                stream.use {
+                    it.writer().use { writer ->
+                        writer.write(content)
+                    }
+                }
+            },
+            bgExecutor
+        )
 }

@@ -2,27 +2,22 @@ package io.github.rsookram.notesmkii
 
 import android.net.Uri
 import androidx.lifecycle.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import java.util.concurrent.Future
 
 class MainViewModel(private val uriData: UriData) : ViewModel() {
 
+    private val cancellables = mutableListOf<Future<*>>()
+
     private var editedContent: String? = null
 
-    private val uri = MutableLiveData<Uri>()
-    val currentUri get() = uri.value
+    var uri: Uri? = null
+        private set
 
-    val title: LiveData<String> = uri.switchMap {
-        liveData<String> {
-            emit(uriData.getName(it) ?: "")
-        }
-    }
+    private val _title = MutableLiveData<String>()
+    val title: LiveData<String> = _title
 
-    val content: LiveData<String> = uri.switchMap {
-        liveData {
-            emit(uriData.readContent(it))
-        }
-    }
+    private val _content = MutableLiveData<String>()
+    val content: LiveData<String> = _content
 
     private val openEventData = eventLiveData<Unit>()
     val opens: LiveData<Unit> = openEventData
@@ -39,7 +34,12 @@ class MainViewModel(private val uriData: UriData) : ViewModel() {
     }
 
     fun onUriSelected(uri: Uri) {
-        this.uri.value = uri
+        this.uri = uri
+
+        cancelPendingWork()
+
+        cancellables += uriData.getName(uri).thenAccept(_title::postValue)
+        cancellables += uriData.readContent(uri).thenAccept(_content::postValue)
     }
 
     fun onTextChanged(text: String) {
@@ -47,12 +47,18 @@ class MainViewModel(private val uriData: UriData) : ViewModel() {
     }
 
     fun save() {
-        val uri = uri.value ?: return
+        val uri = uri ?: return
         val content = editedContent ?: return
 
-        GlobalScope.launch {
-            uriData.writeContent(uri, content)
-        }
+        uriData.writeContent(uri, content)
+    }
+
+    override fun onCleared() {
+        cancelPendingWork()
+    }
+
+    private fun cancelPendingWork() {
+        cancellables.forEach { it.cancel(false) }
     }
 }
 
