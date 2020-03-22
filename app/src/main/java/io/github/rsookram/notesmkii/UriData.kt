@@ -10,33 +10,31 @@ import java.util.function.Supplier
 
 class UriData(private val context: Context, private val bgExecutor: Executor) {
 
-    fun getName(uri: Uri): CompletableFuture<String?> =
+    fun getName(uri: Uri): CompletableFuture<String?> = execute {
+        DocumentFile.fromSingleUri(context, uri)!!.name
+    }
+
+    fun readContent(uri: Uri): CompletableFuture<String> = execute {
+        val stream = context.contentResolver.openInputStream(uri) ?: return@execute ""
+        stream.use { it.reader().readText() }
+    }
+
+    fun writeContent(uri: Uri, content: String): CompletableFuture<Unit> = execute {
+        val stream = context.contentResolver.openOutputStream(uri)
+            ?: throw IOException("Failed to open $uri")
+
+        stream.use {
+            it.writer().use { writer ->
+                writer.write(content)
+            }
+        }
+
+        Unit
+    }
+
+    private inline fun <T> execute(crossinline f: () -> T): CompletableFuture<T> =
         CompletableFuture.supplyAsync(
-            Supplier { DocumentFile.fromSingleUri(context, uri)!!.name },
-            bgExecutor
-        )
-
-    fun readContent(uri: Uri): CompletableFuture<String> =
-        CompletableFuture.supplyAsync(
-            Supplier {
-                val stream = context.contentResolver.openInputStream(uri) ?: return@Supplier ""
-                stream.use { it.reader().readText() }
-            },
-            bgExecutor
-        )
-
-    fun writeContent(uri: Uri, content: String): CompletableFuture<Void> =
-        CompletableFuture.runAsync(
-            Runnable {
-                val stream = context.contentResolver.openOutputStream(uri)
-                    ?: throw IOException("Failed to open $uri")
-
-                stream.use {
-                    it.writer().use { writer ->
-                        writer.write(content)
-                    }
-                }
-            },
+            Supplier { f() },
             bgExecutor
         )
 }
