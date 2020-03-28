@@ -59,6 +59,7 @@ class MainViewModel(private val uriData: UriData) : ViewModel() {
 
     private fun cancelPendingWork() {
         cancellables.forEach { it.cancel(false) }
+        cancellables.clear()
     }
 }
 
