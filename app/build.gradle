@@ -47,6 +47,10 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    dependenciesInfo {
+        includeInApk = false
+    }
 }
 
 dependencies {
