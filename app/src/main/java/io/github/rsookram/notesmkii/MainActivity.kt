@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toolbar
 import androidx.activity.ComponentActivity
-import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.observe
 
 private const val REQUEST_CODE_OPEN = 1
@@ -51,7 +50,7 @@ class MainActivity : ComponentActivity(R.layout.activity_main) {
 
         vm.title.observe(this) { toolbar.title = it }
 
-        editor.doOnTextChanged { text, _, _, _ -> vm.onTextChanged(text.toString()) }
+        editor.doOnTextChanged(vm::onTextChanged)
 
         vm.content.observe(this) {
             if (editor.text.toString() != it) {
