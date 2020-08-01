@@ -16,13 +16,12 @@
         android:title="@string/app_name" />
 
     <ScrollView
-        android:id="@+id/unused_id_for_saved_instance_state"
+        android:id="@+id/scroller"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:clipToPadding="false"
-        android:fillViewport="true"
-        android:paddingVertical="16dp">
+        android:fillViewport="true">
 
         <EditText
             android:id="@+id/text"
@@ -35,6 +34,7 @@
             android:importantForAutofill="no"
             android:letterSpacing="0.03125"
             android:lineSpacingMultiplier="1.2"
+            android:paddingVertical="16dp"
             android:paddingHorizontal="16dp"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="16sp" />
