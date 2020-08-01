@@ -20,7 +20,7 @@ class UriData(private val context: Context, private val bgExecutor: Executor) {
     }
 
     fun writeContent(uri: Uri, content: String): CompletableFuture<Unit> = execute {
-        val stream = context.contentResolver.openOutputStream(uri)
+        val stream = context.contentResolver.openOutputStream(uri, "rwt")
             ?: throw IOException("Failed to open $uri")
 
         stream.use {
