@@ -75,7 +75,7 @@ class MainActivity : ComponentActivity(R.layout.activity_main) {
             startActivityForResult(intent, REQUEST_CODE_CREATE)
         }
 
-        applySystemUiVisibility(toolbar, findViewById(R.id.scroller))
+        applySystemUiVisibility(toolbar, editor)
     }
 
     override fun onPause() {

@@ -5,7 +5,7 @@ import android.graphics.Color
 import android.os.Build
 import android.view.View
 
-fun Activity.applySystemUiVisibility(toolbar: View, scroller: View) {
+fun Activity.applySystemUiVisibility(toolbar: View, content: View) {
     window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or
             View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
             View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
@@ -24,9 +24,15 @@ fun Activity.applySystemUiVisibility(toolbar: View, scroller: View) {
         insets
     }
 
-    scroller.setOnApplyWindowInsetsListener { v, insets ->
+    content.setOnApplyWindowInsetsListener { v, insets ->
+        val padding = resources.getDimensionPixelSize(R.dimen.content_padding)
         with (insets) {
-            v.setPadding(systemWindowInsetLeft, 0, systemWindowInsetRight, systemWindowInsetBottom)
+            v.setPadding(
+                padding + systemWindowInsetLeft,
+                padding,
+                padding + systemWindowInsetRight,
+                padding + systemWindowInsetBottom
+            )
         }
 
         insets

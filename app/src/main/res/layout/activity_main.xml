@@ -16,7 +16,7 @@
         android:title="@string/app_name" />
 
     <ScrollView
-        android:id="@+id/scroller"
+        android:id="@+id/unused_id_for_saved_instance_state"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -34,8 +34,7 @@
             android:importantForAutofill="no"
             android:letterSpacing="0.03125"
             android:lineSpacingMultiplier="1.2"
-            android:paddingVertical="16dp"
-            android:paddingHorizontal="16dp"
+            android:padding="@dimen/content_padding"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="16sp" />
     </ScrollView>
