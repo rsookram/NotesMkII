@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toolbar
 import androidx.activity.ComponentActivity
-import androidx.lifecycle.observe
 
 private const val REQUEST_CODE_OPEN = 1
 private const val REQUEST_CODE_CREATE = 2
