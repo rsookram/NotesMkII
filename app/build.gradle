@@ -60,6 +60,4 @@ dependencies {
     def lifecycleVersion = '2.2.0'
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-livedata-core:$lifecycleVersion"
-
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib'
 }
