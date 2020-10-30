@@ -31,6 +31,7 @@
             android:fontFamily="sans-serif"
             android:gravity="top"
             android:hint="@string/take_note_prompt"
+            android:inputType="textMultiLine"
             android:importantForAutofill="no"
             android:letterSpacing="0.03125"
             android:lineSpacingMultiplier="1.2"
