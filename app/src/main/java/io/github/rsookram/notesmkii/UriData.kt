@@ -6,7 +6,6 @@ import androidx.documentfile.provider.DocumentFile
 import java.io.IOException
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
-import java.util.function.Supplier
 
 class UriData(private val context: Context, private val bgExecutor: Executor) {
 
@@ -28,13 +27,11 @@ class UriData(private val context: Context, private val bgExecutor: Executor) {
                 writer.write(content)
             }
         }
-
-        Unit
     }
 
     private inline fun <T> execute(crossinline f: () -> T): CompletableFuture<T> =
         CompletableFuture.supplyAsync(
-            Supplier { f() },
+            { f() },
             bgExecutor
         )
 }
