@@ -19,18 +19,18 @@ class MainViewModel(private val uriData: UriData) : ViewModel() {
     private val _content = MutableLiveData<String>()
     val content: LiveData<String> = _content
 
-    private val openEventData = eventLiveData<Unit>()
-    val opens: LiveData<Unit> = openEventData
+    private val _opens = eventLiveData<Unit>()
+    val opens: LiveData<Unit> = _opens
 
-    private val createEventData = eventLiveData<Unit>()
-    val creates: LiveData<Unit> = createEventData
+    private val _creates = eventLiveData<Unit>()
+    val creates: LiveData<Unit> = _creates
 
     fun onOpenClicked() {
-        openEventData.setValue(Unit)
+        _opens.setValue(Unit)
     }
 
     fun onCreateClicked() {
-        createEventData.setValue(Unit)
+        _creates.setValue(Unit)
     }
 
     fun onUriSelected(uri: Uri) {
