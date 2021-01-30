@@ -49,7 +49,10 @@ class MainActivity : ComponentActivity(R.layout.activity_main) {
 
         vm.title.observe(this) { toolbar.title = it }
 
-        editor.doOnTextChanged(vm::onTextChanged)
+        editor.apply {
+            filters = arrayOf(RemoveFormattingFilter())
+            doOnTextChanged(vm::onTextChanged)
+        }
 
         vm.content.observe(this) {
             if (editor.text.toString() != it) {
