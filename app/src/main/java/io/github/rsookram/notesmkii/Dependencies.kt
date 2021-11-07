@@ -12,7 +12,7 @@ object Dependencies {
 
         val factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+            override fun <T : ViewModel> create(modelClass: Class<T>): T =
                 MainViewModel(UriData(activity.applicationContext, bgExecutor)) as T
         }
 
