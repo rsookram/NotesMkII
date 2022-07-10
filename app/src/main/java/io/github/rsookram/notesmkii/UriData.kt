@@ -5,9 +5,11 @@ import android.net.Uri
 import android.provider.DocumentsContract
 import java.io.IOException
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 
-class UriData(private val context: Context, private val bgExecutor: Executor) {
+class UriData(private val context: Context) {
+
+    private val bgExecutor = Executors.newSingleThreadExecutor()
 
     fun getName(uri: Uri): CompletableFuture<String?> = execute {
         val resolver = context.contentResolver

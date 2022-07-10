@@ -54,8 +54,4 @@ android {
 
 dependencies {
     implementation 'androidx.activity:activity:1.5.0'
-
-    def lifecycleVersion = '2.5.0'
-    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-livedata-core:$lifecycleVersion"
 }

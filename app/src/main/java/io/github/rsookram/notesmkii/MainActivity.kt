@@ -27,7 +27,8 @@ class MainActivity : ComponentActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        vm = Dependencies.viewModel(this)
+        vm = lastCustomNonConfigurationInstance as? MainViewModel
+            ?: MainViewModel(UriData(applicationContext))
         editor = findViewById(R.id.text)
 
         val uri = savedInstanceState?.getParcelable<Uri>(STATE_URI)
@@ -41,45 +42,37 @@ class MainActivity : ComponentActivity(R.layout.activity_main) {
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.open -> {
-                    vm.onOpenClicked()
+                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                        flags = Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                        type = "text/plain"
+                    }
+
+                    startActivityForResult(intent, REQUEST_CODE_OPEN)
                     true
                 }
                 R.id.create -> {
-                    vm.onCreateClicked()
+                    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                        type = "text/plain"
+                    }
+
+                    startActivityForResult(intent, REQUEST_CODE_CREATE)
                     true
                 }
                 else -> false
             }
         }
 
-        vm.title.observe(this) { toolbar.title = it }
+        vm.onTitleChange = { toolbar.title = it }
 
         editor.apply {
             filters = arrayOf(RemoveFormattingFilter())
             doOnTextChanged(vm::onTextChanged)
         }
 
-        vm.content.observe(this) {
+        vm.onContentLoad = {
             if (editor.text.toString() != it) {
                 editor.text = it
             }
-        }
-
-        vm.opens.observe(this) {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                flags = Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                type = "text/plain"
-            }
-
-            startActivityForResult(intent, REQUEST_CODE_OPEN)
-        }
-
-        vm.creates.observe(this) {
-            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-                type = "text/plain"
-            }
-
-            startActivityForResult(intent, REQUEST_CODE_CREATE)
         }
 
         applySystemUiVisibility(toolbar, editor)
@@ -91,11 +84,24 @@ class MainActivity : ComponentActivity(R.layout.activity_main) {
         }
     }
 
+    override fun onRetainCustomNonConfigurationInstance(): Any = vm
+
     override fun onPause() {
         super.onPause()
         vm.save()
 
         editor.clearFocus()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        vm.onTitleChange = {}
+        vm.onContentLoad = {}
+
+        if (isFinishing) {
+            vm.onCleared()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
