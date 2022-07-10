@@ -1,6 +1,5 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
 }
 
 android {
@@ -22,13 +21,6 @@ android {
             keyAlias "androiddebugkey"
             keyPassword "android"
         }
-    }
-
-    packagingOptions {
-        exclude("kotlin/**")
-        exclude("META-INF/*.kotlin_module")
-        exclude("META-INF/*.version")
-        exclude("kotlin-tooling-metadata.json")
     }
 
     buildTypes {

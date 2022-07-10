@@ -16,7 +16,6 @@ your device (can be local or cloud-based storage).
 
 This app intentionally uses few libraries to keep app size down.
 
-- Kotlin
 - Storage Access Framework
 
 
