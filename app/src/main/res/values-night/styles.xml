@@ -7,5 +7,8 @@
         <item name="android:colorAccent">#E0E0E0</item>
 
         <item name="android:windowBackground">@color/bg_window</item>
+
+        <item name="android:statusBarColor">#B3121212</item>
+        <item name="android:navigationBarColor">#00000000</item>
     </style>
 </resources>
