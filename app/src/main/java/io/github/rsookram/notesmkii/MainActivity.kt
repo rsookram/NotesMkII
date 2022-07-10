@@ -4,6 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.View
+import android.view.WindowInsets
 import android.widget.TextView
 import android.widget.Toolbar
 import androidx.activity.ComponentActivity
@@ -18,6 +21,8 @@ class MainActivity : ComponentActivity(R.layout.activity_main) {
     private lateinit var vm: MainViewModel
 
     private lateinit var editor: TextView
+
+    private var bottomIgnoreAreaHeight = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +83,12 @@ class MainActivity : ComponentActivity(R.layout.activity_main) {
         }
 
         applySystemUiVisibility(toolbar, editor)
+
+        findViewById<View>(android.R.id.content).setOnApplyWindowInsetsListener { _, insets ->
+            bottomIgnoreAreaHeight = insets.getInsets(WindowInsets.Type.systemBars()).bottom
+
+            insets
+        }
     }
 
     override fun onPause() {
@@ -102,5 +113,13 @@ class MainActivity : ComponentActivity(R.layout.activity_main) {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelable(STATE_URI, vm.uri)
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        if (ev.y > window.decorView.height - bottomIgnoreAreaHeight) {
+            return false
+        }
+
+        return super.dispatchTouchEvent(ev)
     }
 }
