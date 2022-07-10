@@ -9,14 +9,13 @@ import android.view.View
 import android.view.WindowInsets
 import android.widget.TextView
 import android.widget.Toolbar
-import androidx.activity.ComponentActivity
 
 private const val REQUEST_CODE_OPEN = 1
 private const val REQUEST_CODE_CREATE = 2
 
 private const val STATE_URI = "uri"
 
-class MainActivity : ComponentActivity(R.layout.activity_main) {
+class MainActivity : Activity() {
 
     private lateinit var vm: MainViewModel
 
@@ -27,7 +26,9 @@ class MainActivity : ComponentActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        vm = lastCustomNonConfigurationInstance as? MainViewModel
+        setContentView(R.layout.activity_main)
+
+        vm = lastNonConfigurationInstance as? MainViewModel
             ?: MainViewModel(UriData(applicationContext))
         editor = findViewById(R.id.text)
 
@@ -84,7 +85,7 @@ class MainActivity : ComponentActivity(R.layout.activity_main) {
         }
     }
 
-    override fun onRetainCustomNonConfigurationInstance(): Any = vm
+    override fun onRetainNonConfigurationInstance(): Any = vm
 
     override fun onPause() {
         super.onPause()

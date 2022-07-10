@@ -9,7 +9,7 @@ your device (can be local or cloud-based storage).
 ## Features
 
 - Requires no permissions
-- Small app (< 100 KB)
+- Small app (< 64 KB)
 
 
 ## Technologies
@@ -17,7 +17,6 @@ your device (can be local or cloud-based storage).
 This app intentionally uses few libraries to keep app size down.
 
 - Kotlin
-- androidx `activity`
 - Storage Access Framework
 
 

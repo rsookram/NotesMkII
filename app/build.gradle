@@ -13,8 +13,6 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
-
-        resConfigs "en", "anydpi"
     }
 
     signingConfigs {
@@ -50,8 +48,4 @@ android {
     dependenciesInfo {
         includeInApk = false
     }
-}
-
-dependencies {
-    implementation 'androidx.activity:activity:1.5.0'
 }
