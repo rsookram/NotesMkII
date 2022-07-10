@@ -17,7 +17,7 @@ your device (can be local or cloud-based storage).
 This app intentionally uses few libraries to keep app size down.
 
 - Kotlin
-- androidx `activity` and `documentfile`
+- androidx `activity`
 - Jetpack ViewModel and LiveData
 - Storage Access Framework
 

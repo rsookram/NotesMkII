@@ -2,7 +2,7 @@ package io.github.rsookram.notesmkii
 
 import android.content.Context
 import android.net.Uri
-import androidx.documentfile.provider.DocumentFile
+import android.provider.DocumentsContract
 import java.io.IOException
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
@@ -10,7 +10,21 @@ import java.util.concurrent.Executor
 class UriData(private val context: Context, private val bgExecutor: Executor) {
 
     fun getName(uri: Uri): CompletableFuture<String?> = execute {
-        DocumentFile.fromSingleUri(context, uri)!!.name
+        val resolver = context.contentResolver
+
+        resolver.query(
+            uri,
+            arrayOf(DocumentsContract.Document.COLUMN_DISPLAY_NAME),
+            null,
+            null,
+            null
+        )?.use { cursor ->
+            if (cursor.moveToFirst() && !cursor.isNull(0)) {
+                cursor.getString(0)
+            } else {
+                null
+            }
+        }
     }
 
     fun readContent(uri: Uri): CompletableFuture<String> = execute {
