@@ -16,7 +16,7 @@
         android:title="@string/app_name" />
 
     <ScrollView
-        android:id="@+id/unused_id_for_saved_instance_state"
+        android:id="@+id/scroller"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

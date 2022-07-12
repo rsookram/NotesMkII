@@ -11,6 +11,7 @@ import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowInsets;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -91,6 +92,10 @@ public class MainActivity extends Activity {
         vm.setOnContentLoad(content -> {
             if (!editor.getText().toString().equals(content)) {
                 editor.setText(content);
+
+                // Reset scroll position to start at the top of the newly loaded content
+                ScrollView scroller = findViewById(R.id.scroller);
+                scroller.scrollTo(0, 0);
             }
         });
 
