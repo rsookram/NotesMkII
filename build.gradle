@@ -26,6 +26,14 @@ android {
             keyAlias "androiddebugkey"
             keyPassword "android"
         }
+        release {
+            if (System.getenv("NOTES_STORE_FILE") != null) {
+                storeFile file(System.getenv("NOTES_STORE_FILE"))
+                storePassword System.getenv("NOTES_STORE_PASSWORD")
+                keyAlias System.getenv("NOTES_KEY_ALIAS")
+                keyPassword System.getenv("NOTES_KEY_PASSWORD")
+            }
+        }
     }
 
     buildTypes {
@@ -37,13 +45,7 @@ android {
             minifyEnabled true
             proguardFiles 'proguard-rules.pro'
 
-            // Just for testing release builds. Not actually distributed.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
-
-    dependenciesInfo {
-        includeInApk = false
-    }
 }
-

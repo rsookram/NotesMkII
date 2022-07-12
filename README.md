@@ -3,20 +3,31 @@
 Notes Mk II is a small note-taking app for Android. It uses Android's
 [Storage Access Framework](https://developer.android.com/guide/topics/providers/document-provider)
 to read and write plain text files stored by any document storage provider on
-your device (can be local or cloud-based storage).
+your device (local or cloud-based storage).
 
 
 ## Features
 
 - Requires no permissions
-- Small app (< 64 KB)
+- Small app (< 32 KB)
+- No third-party runtime dependencies
 
 
-## Technologies
+## Build
 
-This app intentionally uses few libraries to keep app size down.
+Run the following command from the root of the repository to make a debug
+build:
 
-- Storage Access Framework
+```shell
+./gradlew assembleDebug
+```
+
+Making a release build is similar, but requires environment variables to be set
+to indicate how to sign the APK:
+
+```shell
+NOTES_STORE_FILE='...' NOTES_STORE_PASSWORD='...' NOTES_KEY_ALIAS='...' NOTES_KEY_PASSWORD='...' ./gradlew assembleRelease
+```
 
 
 ## License
