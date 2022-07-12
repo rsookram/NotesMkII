@@ -1,2 +1,7 @@
-include ':app'
-rootProject.name='Notes Mk II'
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name='NotesMkII'

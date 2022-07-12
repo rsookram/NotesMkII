@@ -1,20 +1,49 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
+plugins {
+    id 'com.android.application' version '7.2.1' apply true
+}
+
+repositories {
+    google()
+    mavenCentral()
+}
+
+android {
+
+    compileSdk 32
+
+    defaultConfig {
+        applicationId "io.github.rsookram.notesmkii"
+        minSdk 30
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.1'
+
+    signingConfigs {
+        debug {
+            storeFile file("debug.keystore")
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles 'proguard-rules.pro'
+
+            // Just for testing release builds. Not actually distributed.
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    dependenciesInfo {
+        includeInApk = false
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
