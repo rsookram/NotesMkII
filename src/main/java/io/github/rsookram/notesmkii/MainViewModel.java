@@ -35,19 +35,28 @@ public class MainViewModel {
 
         cancelPendingWork();
 
+        // Clear displayed data while waiting for load so that the old data doesn't flicker on the
+        // screen after selecting a file.
+        setTitle("");
+        setContent("");
+
         Future<?> future = uriData.getName(uri)
-                .thenAccept(title -> handler.post(() -> {
-                    MainViewModel.this.title = title;
-                    onTitleChange.accept(title);
-                }));
+                .thenAccept(title -> handler.post(() -> setTitle(title)));
         cancellables.add(future);
 
         future = uriData.readContent(uri)
-                .thenAccept(content -> handler.post(() -> {
-                    MainViewModel.this.content = content;
-                    onContentLoad.accept(content);
-                }));
+                .thenAccept(content -> handler.post(() -> setContent(content)));
         cancellables.add(future);
+    }
+
+    private void setTitle(String title) {
+        MainViewModel.this.title = title;
+        onTitleChange.accept(title);
+    }
+
+    private void setContent(String content) {
+        MainViewModel.this.content = content;
+        onContentLoad.accept(content);
     }
 
     public void onTextChanged(String text) {
