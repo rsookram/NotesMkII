@@ -120,7 +120,7 @@ public class MainActivity extends Activity {
 
         content.setOnApplyWindowInsetsListener((v, insets) -> {
             int padding = getResources().getDimensionPixelSize(R.dimen.content_padding);
-            Insets systemInsets = insets.getInsets(WindowInsets.Type.systemBars());
+            Insets systemInsets = insets.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.ime());
             v.setPadding(
                     padding + systemInsets.left,
                     padding,
