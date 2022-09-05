@@ -26,12 +26,19 @@ public class RemoveFormattingFilter implements InputFilter {
 
         SpannableStringBuilder builder = new SpannableStringBuilder(source, start, end);
         Object[] spans = builder.getSpans(0, builder.length(), Object.class);
+
+        boolean changed = false;
         for (Object span : spans) {
             if (span instanceof BulletSpan
                     || span instanceof SuperscriptSpan
                     || span instanceof URLSpan) {
+                changed = true;
                 builder.removeSpan(span);
             }
+        }
+
+        if (!changed) {
+            return null;
         }
 
         return builder;
