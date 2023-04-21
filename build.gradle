@@ -1,5 +1,5 @@
 plugins {
-    id 'com.android.application' version '7.3.0' apply true
+    id 'com.android.application' version '8.0.0' apply true
 }
 
 repositories {
@@ -8,6 +8,7 @@ repositories {
 }
 
 android {
+    namespace 'io.github.rsookram.notesmkii'
 
     compileSdk 33
 
