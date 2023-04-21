@@ -27,11 +27,11 @@ android {
             keyPassword "android"
         }
         release {
-            if (System.getenv("NOTES_STORE_FILE") != null) {
-                storeFile file(System.getenv("NOTES_STORE_FILE"))
-                storePassword System.getenv("NOTES_STORE_PASSWORD")
-                keyAlias System.getenv("NOTES_KEY_ALIAS")
-                keyPassword System.getenv("NOTES_KEY_PASSWORD")
+            if (System.getenv("STORE_FILE") != null) {
+                storeFile file(System.getenv("STORE_FILE"))
+                storePassword System.getenv("STORE_PASSWORD")
+                keyAlias System.getenv("KEY_ALIAS")
+                keyPassword System.getenv("KEY_PASSWORD")
             }
         }
     }
